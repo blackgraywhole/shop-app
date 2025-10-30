@@ -1,12 +1,7 @@
 from fastapi import FastAPI
-import uvicorn
-from routers import categories, products
+from app.routers import categories, products
 
-
-app = FastAPI(
-    title="FastAPI Интернет-магазин",
-    version="0.1.0",
-)
+app = FastAPI(title="FastAPI Интернет-магазин", version="0.1.0", debug=True)
 
 app.include_router(categories.router)
 app.include_router(products.router)
@@ -18,7 +13,3 @@ async def root():
     Корневой маршрут, подтверждающий, что API работает.
     """
     return {"message": "Добро пожаловать в API интернет-магазина!"}
-
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", port=8000, reload=True)
