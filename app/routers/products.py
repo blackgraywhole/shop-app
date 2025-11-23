@@ -6,7 +6,7 @@ from app.models.users import User as UserModel
 from app.auth import get_current_seller
 from app.models.products import Product as ProductModel
 from app.models.categories import Category as CategoryModel
-from app.schemas import ProductCreate, Product as ProductSchema
+from app.schemas import ProductCreate, Product as ProductSchema, ProductList
 from app.db_depends import AsyncSessionDep, get_async_db
 
 router = APIRouter(

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from decimal import Decimal
 
@@ -75,8 +77,8 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=8, description="Пароль (минимум 8 символов)")
     role: str = Field(
         default="buyer",
-        pattern="^(buyer|seller)$",
-        description="Роль: 'buyer' или 'seller'",
+        pattern="^(buyer|seller|admin)$",
+        description="Роль: 'buyer' или 'seller' или 'admin'",
     )
 
 
@@ -85,3 +87,30 @@ class User(ORMModel):
     email: EmailStr
     is_active: bool
     role: str
+
+
+class Review(ORMModel):
+    id: int
+    user_id: int
+    product_id: int
+    comment: str | None = None
+    comment_date: datetime
+    grade: int = Field(..., ge=1, le=5)
+    is_active: bool = True
+
+
+class ReviewCreate(BaseModel):
+    product_id: int
+    comment: str | None = None
+    grade: int = Field(..., ge=1, le=5)
+
+
+class ProductList(ORMModel):
+    """
+    Список пагинации для товаров.
+    """
+
+    items: list[Product] = Field(description="Товары для текущей страницы")
+    total: int = Field(ge=0, description="Общее количество товаров")
+    page: int = Field(ge=1, description="Номер текущей страницы")
+    page_size: int = Field(ge=1, description="Количество элементов на странице")

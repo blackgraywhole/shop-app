@@ -84,7 +84,6 @@ async def delete_category(category_id: int, db: AsyncSessionDep):
     """
     Логически удаляет категорию по её ID, устанавливая is_active=False.
     """
-    # Проверка существования активной категории
     category = await db.scalar(
         select(CategoryModel).where(
             CategoryModel.id == category_id, CategoryModel.is_active == True
@@ -94,7 +93,6 @@ async def delete_category(category_id: int, db: AsyncSessionDep):
     if category is None:
         raise HTTPException(status_code=404, detail="Category not found")
 
-    # Логическое удаление категории (установка is_active=False)
     category.is_active = False
     await db.commit()
 
